@@ -5,6 +5,7 @@
 #include <string.h>
 #include <arpa/inet.h> //inet_addr
 #include <stdlib.h>
+#include <unistd.h> // for close
 
 #define PORT 8888
 
@@ -59,6 +60,7 @@ int main(int argc , char *argv[])
         if (strcmp(message, "Q") == 0){
              printf("Client has exited\n\n");
              free(message);
+             close(socket_desc);
              exit(0);
         }
         printf("Incoming Client Message: %s\n", message);
@@ -66,6 +68,7 @@ int main(int argc , char *argv[])
      
     
     free(message);
+    close(socket_desc);
     return 0;
 }
 

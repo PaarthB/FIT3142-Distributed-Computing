@@ -5,6 +5,7 @@
 #include <string.h>
 #include <arpa/inet.h> //inet_addr
 #include <stdlib.h>
+#include <unistd.h> // for close
 
 #define PORT 8888
 
@@ -51,15 +52,17 @@ int main(int argc , char *argv[])
        if (strcmp(message, "Q") == 0){
             printf("Client exiting successful.\n");
             send(socket_desc , message , strlen(message) , 0);
+            close(socket_desc);
             free(message);
             exit(0);
             return 0;
        }
        // Send data to server. It fails if send returns < 0
-       if( send(socket_desc , message , strlen(message) , 0) < 0)
+       else if( send(socket_desc , message , strlen(message) , 0) < 0)
        {
            puts("Send failed");
            free(message);
+           close(socket_desc);
            return 1;
        }
        puts("Data sent to Server for displaying.\n");
@@ -72,6 +75,7 @@ int main(int argc , char *argv[])
     puts("Reply received\n");
     puts(server_reply);
     free(message);
+    close(socket_desc);
     return 0;
 }
 
